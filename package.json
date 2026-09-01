@@ -1,0 +1,12 @@
+{
+  "name": "fso-graphql",
+  "version": "1.0.0",
+  "description": "This repository contains the assignments for the University of Helsinki [Full Stack Open](https://fullstackopen.com/en/) course - [Part8](https://courses.mooc.fi/org/uh-cs/courses/full-stack-open-graphql).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
