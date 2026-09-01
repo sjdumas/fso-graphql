@@ -25,7 +25,7 @@ let authors = [
 		name: "Sandi Metz", // birthyear not known
 		id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
 	},
-]
+];
 
 /*
  * Suomi:
@@ -91,13 +91,20 @@ let books = [
 		id: "afa5de04-344d-11e9-a414-719c6709cf3e",
 		genres: ["classic", "revolution"],
 	},
-]
+];
 
 /*
 	you can remove the placeholder query once your first one has been implemented 
 */
 
 const typeDefs = /* GraphQL */`
+	type Author {
+		name: String!
+		born: Int
+		bookCount: Int!
+		id: ID!
+	}
+
 	type Book {
 		title: String!
 		author: String!
@@ -110,6 +117,7 @@ const typeDefs = /* GraphQL */`
 		bookCount: Int!
 		authorCount: Int!
 		allBooks: [Book!]!
+		allAuthors: [Author!]!
 	}
 `;
 
@@ -118,16 +126,21 @@ const resolvers = {
 		bookCount: () => books.length,
 		authorCount: () => authors.length,
 		allBooks: () => books,
+		allAuthors: () => authors,
 	},
-}
+	Author: {
+		bookCount: (root) => 
+			books.filter((book) => book.author === root.name).length,
+	},
+};
 
 const server = new ApolloServer({
 	typeDefs,
 	resolvers,
-})
+});
 
 startStandaloneServer(server, {
 	listen: { port: 4000 },
 }).then(({ url }) => {
 	console.log(`Server ready at ${url}`)
-})
+});
