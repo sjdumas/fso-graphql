@@ -159,16 +159,16 @@ const resolvers = {
 	},
 	Mutation: {
 		addBook: (root, args) => {
-			const book = { ...args, id: uuid() };
+			const authorName = args.author.trim();
+			const book = { ...args, author: authorName, id: uuid() };
 			books = books.concat(book);
-
-			const authorExists = authors.some((a) => a.name === args.author);
-
+		
+			const authorExists = authors.some((a) => a.name === authorName);
 			if (!authorExists) {
-				const newAuthor = { name: args.author, id: uuid() };
+				const newAuthor = { name: authorName, id: uuid() };
 				authors = authors.concat(newAuthor);
 			}
-
+		
 			return book;
 		},
 		editAuthor: (root, args) => {
