@@ -1,54 +1,42 @@
-const { authors, books, uuid } = require("./data");
+const Author = require("./models/author");
+const Book = require("./models/book");
 
 const resolvers = {
 	Query: {
-		bookCount: () => books.length,
-		authorCount: () => authors.length,
-		allBooks: (root, args) => {
-			let filteredBooks = books;
-
-			if (args.author) {
-				filteredBooks = filteredBooks.filter(
-					(book) => book.author === args.author
-				);
-			}
-
-			if (args.genre) {
-				filteredBooks = filteredBooks.filter((book) =>
-					book.genres.includes(args.genre)
-				);
-			}
-
-			return filteredBooks;
+		bookCount: async () => Book.collection.countDocuments(),
+		authorCount: async () => Author.collection.countDocuments(),
+		allBooks: async () => {
+			return Book.find({});
 		},
-		allAuthors: () => authors,
+		allAuthors: async () => Author.find({}),
 	},
 	Author: {
-		bookCount: (root) =>
-			books.filter((book) => book.author === root.name).length,
+		bookCount: () => 0,
 	},
 	Mutation: {
-		addBook: (root, args) => {
-			const authorName = args.author.trim();
-			const book = { ...args, author: authorName, id: uuid() };
-			books.push(book);
+		addBook: async (root, args) => {
+			let author = await Author.findOne({ name: args.author });
 
-			const authorExists = authors.some((a) => a.name === authorName);
-			if (!authorExists) {
-				const newAuthor = { name: authorName, id: uuid() };
-				authors.push(newAuthor);
+			if (!author) {
+				author = new Author({ name: args.author });
+				await author.save();
 			}
+
+			const book = new Book({ ...args, author: author._id });
+			await book.save();
 
 			return book;
 		},
-		editAuthor: (root, args) => {
-			const author = authors.find((a) => a.name === args.name);
+		editAuthor: async (root, args) => {
+			const author = await Author.findOne({ name: args.name });
 
 			if (!author) {
 				return null;
 			}
 
 			author.born = args.setBornTo;
+			await author.save();
+
 			return author;
 		},
 	},
