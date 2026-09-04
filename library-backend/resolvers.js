@@ -1,3 +1,4 @@
+const { GraphQLError } = require("graphql");
 const Author = require("./models/author");
 const Book = require("./models/book");
 
@@ -37,11 +38,32 @@ const resolvers = {
 
 			if (!author) {
 				author = new Author({ name: args.author });
-				await author.save();
+				try {
+					await author.save();
+				} catch (error) {
+					throw new GraphQLError("Saving author failed", {
+						exceptions: {
+							code: "BAD_USER_INPUT",
+							invalidArgs: args.author,
+							error,
+						},
+					});
+				}
 			}
 
 			const book = new Book({ ...args, author: author._id });
-			await book.save();
+
+			try {
+				await book.save();
+			} catch (error) {
+				throw new GraphQLError("Saving book failed", {
+					extensions: {
+						code: "BAD_USER_INPUT",
+						invalidArgs: args.title,
+						error,
+					},
+				});
+			}
 
 			return book;
 		},
@@ -53,7 +75,17 @@ const resolvers = {
 			}
 
 			author.born = args.setBornTo;
-			await author.save();
+			try {
+				await author.save();
+			} catch (error) {
+				throw new GraphQLError("Editing author failed", {
+					extensions: {
+						code: "BAD_USER_INPUT",
+						invalidArgs: args.setBornTo,
+						error,
+					},
+				});
+			}
 
 			return author;
 		},
