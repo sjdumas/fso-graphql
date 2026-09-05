@@ -4,7 +4,10 @@ import { ALL_BOOKS } from "../queries";
 
 const Books = (props) => {
 	const [genre, setGenre] = useState(null);
-	const result = useQuery(ALL_BOOKS);
+
+	const result = useQuery(ALL_BOOKS, {
+		variables: { genre },
+	});
 
 	if (!props.show) {
 		return null;
@@ -15,12 +18,6 @@ const Books = (props) => {
 	}
 
 	const books = result.data.allBooks;
-
-	const genres = [...new Set(books.flatMap((b) => b.genres))].filter(Boolean);
-
-	const filteredBooks = genre
-		? books.filter((b) => b.genres.includes(genre))
-		: books;
 
 	return (
 		<div>
@@ -39,7 +36,7 @@ const Books = (props) => {
 						<th>author</th>
 						<th>published</th>
 					</tr>
-					{filteredBooks.map((a) => (
+					{books.map((a) => (
 						<tr key={a.id}>
 							<td>{a.title}</td>
 							<td>{a.author.name}</td>
@@ -50,11 +47,13 @@ const Books = (props) => {
 			</table>
 
 			<div>
-				{genres.map((g) => (
-					<button key={g} onClick={() => setGenre(g)}>
-						{g}
-					</button>
-				))}
+				<button onClick={() => setGenre("refactoring")}>refactoring</button>
+				<button onClick={() => setGenre("agile")}>agile</button>
+				<button onClick={() => setGenre("patterns")}>patterns</button>
+				<button onClick={() => setGenre("design")}>design</button>
+				<button onClick={() => setGenre("sci-fi")}>sci-fi</button>
+				<button onClick={() => setGenre("horror")}>horror</button>
+				<button onClick={() => setGenre("fantasy")}>fantasy</button>
 				<button onClick={() => setGenre(null)}>all genres</button>
 			</div>
 		</div>
