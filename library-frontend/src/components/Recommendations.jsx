@@ -3,7 +3,9 @@ import { ME, ALL_BOOKS } from "../queries";
 
 const Recommendations = (props) => {
 	const userResult = useQuery(ME);
-	const booksResult = useQuery(ALL_BOOKS);
+	const booksResult = useQuery(ALL_BOOKS, {
+		fetchPolicy: "cache-and-network",
+	});
 
 	if (!props.show) {
 		return null;
