@@ -60,6 +60,7 @@ const Authors = (props) => {
 							<label htmlFor="authorName">name</label>
 							<select
 								id="authorName"
+								name="name"
 								value={name}
 								onChange={({ target }) => setName(target.value)}
 							>

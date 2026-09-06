@@ -10,7 +10,10 @@ const NewBook = (props) => {
 	const [genres, setGenres] = useState([]);
 
 	const [createBook] = useMutation(CREATE_BOOK, {
-		refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+		refetchQueries: [
+			{ query: ALL_BOOKS, variables: { genre: null } },
+			{ query: ALL_AUTHORS },
+		],
 	});
 
 	if (!props.show) {
@@ -45,7 +48,7 @@ const NewBook = (props) => {
 		<div>
 			<form onSubmit={submit}>
 				<div>
-					title
+					<label htmlFor="title">title</label>
 					<input
 						id="title"
 						value={title}
@@ -53,7 +56,7 @@ const NewBook = (props) => {
 					/>
 				</div>
 				<div>
-					author
+					<label htmlFor="author">author</label>
 					<input
 						id="author"
 						value={author}
@@ -61,7 +64,7 @@ const NewBook = (props) => {
 					/>
 				</div>
 				<div>
-					published
+					<label htmlFor="published">published</label>
 					<input
 						id="published"
 						type="number"
@@ -70,6 +73,7 @@ const NewBook = (props) => {
 					/>
 				</div>
 				<div>
+					<label htmlFor="genre">genre</label>
 					<input
 						id="genre"
 						value={genre}

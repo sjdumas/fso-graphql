@@ -53,6 +53,7 @@ const Books = (props) => {
 				<button onClick={() => setGenre("patterns")}>patterns</button>
 				<button onClick={() => setGenre("design")}>design</button>
 				<button onClick={() => setGenre("sci-fi")}>sci-fi</button>
+				<button onClick={() => setGenre("classic")}>classic</button>
 				<button onClick={() => setGenre("horror")}>horror</button>
 				<button onClick={() => setGenre("fantasy")}>fantasy</button>
 				<button onClick={() => setGenre(null)}>all genres</button>

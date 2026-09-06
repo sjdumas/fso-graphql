@@ -2,7 +2,9 @@ import { useQuery } from "@apollo/client/react";
 import { ME, ALL_BOOKS } from "../queries";
 
 const Recommendations = (props) => {
-	const userResult = useQuery(ME);
+	const userResult = useQuery(ME, {
+		fetchPolicy: "network-only",
+	});
 	const booksResult = useQuery(ALL_BOOKS, {
 		fetchPolicy: "cache-and-network",
 	});
@@ -15,10 +17,16 @@ const Recommendations = (props) => {
 		return <div>loading...</div>;
 	}
 
+	if (!userResult.data || !userResult.data.me) {
+		return <div>you must be logged in to see recommendations</div>;
+	}
+
 	const favoriteGenre = userResult.data.me.favoriteGenre;
 	const books = booksResult.data.allBooks;
 
-	const recommendedBooks = books.filter((b) => b.genres.includes(favoriteGenre));
+	const recommendedBooks = books.filter((b) =>
+		b.genres.includes(favoriteGenre)
+	);
 
 	return (
 		<div>
