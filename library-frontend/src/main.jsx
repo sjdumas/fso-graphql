@@ -8,24 +8,24 @@ import { setContext } from "@apollo/client/link/context";
 const httpLink = new HttpLink({ uri: "http://localhost:4000" });
 
 const authLink = setContext((_, { headers }) => {
-	const token = localStorage.getItem("library-user-token");
-	return {
-		headers: {
-			...headers,
-			authorization: token ? `Bearer ${token}` : null,
-		},
-	};
+  const token = localStorage.getItem("library-user-token");
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : null,
+    },
+  };
 });
 
 const client = new ApolloClient({
-	link: authLink.concat(httpLink),
-	cache: new InMemoryCache(),
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
 });
 
 createRoot(document.getElementById("root")).render(
-	<StrictMode>
-		<ApolloProvider client={client}>
-			<App />
-		</ApolloProvider>
-	</StrictMode>
+  <StrictMode>
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+  </StrictMode>
 );

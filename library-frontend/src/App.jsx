@@ -7,57 +7,57 @@ import LoginForm from "./components/LoginForm";
 import Recommendations from "./components/Recommendations";
 
 const App = () => {
-	const [page, setPage] = useState("authors");
-	const [token, setToken] = useState(null);
-	const client = useApolloClient();
+  const [page, setPage] = useState("authors");
+  const [token, setToken] = useState(null);
+  const client = useApolloClient();
 
-	useEffect(() => {
-		const savedToken = localStorage.getItem("library-user-token");
-		if (savedToken) {
-			setToken(savedToken);
-		}
-	}, []);
+  useEffect(() => {
+    const savedToken = localStorage.getItem("library-user-token");
+    if (savedToken) {
+      setToken(savedToken);
+    }
+  }, []);
 
-	const logout = () => {
-		setToken(null);
-		localStorage.clear();
-		client.resetStore();
-		setPage("authors");
-	};
+  const logout = () => {
+    setToken(null);
+    localStorage.clear();
+    client.resetStore();
+    setPage("authors");
+  };
 
-	return (
-		<div>
-			<div>
-				<button onClick={() => setPage("authors")}>authors</button>
-				<button onClick={() => setPage("books")}>books</button>
-				{token && (
-					<button onClick={() => setPage("add")}>add book</button>
-				)}
-				{token && (
-					<button onClick={() => setPage("recommend")}>recommend</button>
-				)}
-				{token ? (
-					<button onClick={logout}>logout</button>
-				) : (
-					<button onClick={() => setPage("login")}>login</button>
-				)}
-			</div>
+  return (
+    <div>
+      <div>
+        <button onClick={() => setPage("authors")}>authors</button>
+        <button onClick={() => setPage("books")}>books</button>
+        {token && (
+          <button onClick={() => setPage("add")}>add book</button>
+        )}
+        {token && (
+          <button onClick={() => setPage("recommend")}>recommend</button>
+        )}
+        {token ? (
+          <button onClick={logout}>logout</button>
+        ) : (
+          <button onClick={() => setPage("login")}>login</button>
+        )}
+      </div>
 
-			<Authors show={page === "authors"} token={token} />
+      <Authors show={page === "authors"} token={token} />
 
-			<Books show={page === "books"} />
+      <Books show={page === "books"} />
 
-			<Recommendations show={page === "recommend"} />
+      <Recommendations show={page === "recommend"} />
 
-			<NewBook show={page === "add"} />
+      <NewBook show={page === "add"} />
 
-			<LoginForm
-				show={page === "login"}
-				setToken={setToken}
-				setPage={setPage}
-			/>
-		</div>
-	);
+      <LoginForm
+        show={page === "login"}
+        setToken={setToken}
+        setPage={setPage}
+      />
+    </div>
+  );
 };
 
 export default App;
